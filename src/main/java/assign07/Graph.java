@@ -4,16 +4,18 @@ import java.util.List;
 import java.util.ArrayList;
 public class Graph <Type> {
     private ArrayList<Vertex<Type>> nodes;
-    private ArrayList<Edge<Type>> edges;
 
     /**
      * Constructor to create a weighted or unweighted graph
-     * @param sources - A list of raw data, where each element at a given index corresponds with the same index in 'destinations'
+     * @param sources
+     *
+     *     /** - A list of raw data, where each element at a given index corresponds with the same index in 'destinations'
      * @param destinations - A list of raw data, corresponding with sources
      * @param weights
      */
     public Graph(List<Type> sources, List<Type> destinations, List<Double> weights)
     {
+        nodes = new ArrayList<>();
         if (sources.size() != destinations.size())
         {
             throw new IllegalArgumentException("Sources and Destinations must be equivalent sizes.");
@@ -21,21 +23,45 @@ public class Graph <Type> {
 
         for (int i = 0; i < sources.size(); i++)
         {
-        	boolean exists = false;
-        	
-        	for(int j = 0; j<nodes.size(); j++) {
-        		if(source.get(i).equals(nodes.get(j).data)) {
-        			Edge<T> toExisting = new Edge(weights.get(i),nodes.get(j));
-        			nodes.get(j).addEdge(toExisting);
-        			exists = true;
-        			break;
-        		}
-        		else if(destination.get(i).equals(nodes.get(j).data))
+            Type srcData = sources.get(i);
+            Type destData = destinations.get(i);
+            Vertex<Type> sourceNode = null;
+            Vertex<Type> destinationNode = null;
+        	boolean srcExists = false;
+            boolean destExists = false;
+            for (Vertex<Type> node : nodes) {
+                if (srcData.equals(node.data)) {
+                    sourceNode = node;
+                    srcExists = true;
+                }
+                if (destData.equals(node.data)) {
+                    destinationNode = node;
+                    destExists = true;
+                }
+            }
+            if (srcExists && destExists)
+            {
+                continue;
+            }
+        	else if(srcExists) {
+                Type data = destinations.get(i);
+                destinationNode = new Vertex<>(data);
+                nodes.add(destinationNode);
+                Edge<Type> edge = new Edge<>(weights.get(i), destinationNode);
+                sourceNode.addEdge(edge);
         	}
-        	
-        	if(!exists) {
-        		
-        	}
+            else if(destExists) {
+                sourceNode = new Vertex<>(sources.get(i));
+                Edge<Type> edge = new Edge<>(weights.get(i), destinationNode);
+                destinationNode.indegree++;
+                sourceNode.addEdge(edge);
+            }
+            else {
+                destinationNode = new Vertex<>(destinations.get(i));
+                Edge<Type> edge = new Edge<>(weights.get(i), destinationNode);
+                sourceNode = new Vertex<>(sources.get(i));
+
+            }
         
         }
     }
