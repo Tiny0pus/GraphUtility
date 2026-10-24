@@ -2,50 +2,93 @@ package assign07;
 
 import java.util.List;
 import java.util.ArrayList;
-public class Graph <T> {
+public class Graph <Type> {
+    private ArrayList<Vertex<Type>> nodes;
+    private ArrayList<Edge<Type>> edges;
 
 
-
-    public Graph()
+    /**
+     * Constructor to create a weighted or unweighted graph
+     * @param sources - A list of raw data, where each element at a given index corresponds with the same index in 'destinations'
+     * @param destinations - A list of raw data, corresponding with sources
+     * @param weights
+     */
+    public Graph(List<Type> sources, List<Type> destinations, List<Double> weights)
     {
+        if (sources.size() != destinations.size())
+        {
+            throw new IllegalArgumentException("Sources and Destinations must be equivalent sizes.");
+        }
 
+        for (int i = 0; i < sources.size(); i++)
+        {
+         Vertex<Type> node = new Vertex<>();
+        }
     }
 
 
-    public List<T> breadthFirstSearch(T source, T destination)
+    public List<Type> breadthFirstSearch(Type source, Type destination)
     {
-        return new ArrayList<T>();
+        return new ArrayList<Type>();
     }
 
-    public List<T> dijkstrasAlgorithm(T source, T destination)
+    public List<Type> dijkstrasAlgorithm(Type source, Type destination)
     {
-        return new ArrayList<T>();
+        return new ArrayList<Type>();
     }
-    public List<T> topoSort()
+    public List<Type> topoSort()
     {
-        return new ArrayList<T>();
+        return new ArrayList<Type>();
     }
+
 
 
 
 
     public static class Edge<T>
     {
-        boolean isWeighted = false;
-        // isBiDirectional
-        boolean isBi = false;
-        Vertex<T> front;
-        Vertex<T> rear;
-
-        public Edge(boolean isWeighted, boolean isBi, Vertex<T> front, Vertex<T> rear)
+        Vertex<T> next;
+        double weight;
+        public Edge(double weight, Vertex<T> next)
         {
-            this.isWeighted = isWeighted;
-            this.isBi = isBi;
-            this.front = front;
-            this.rear = rear;
+            this.weight = weight;
+            this.next = next;
         }
     }
+
+
+    public static class Vertex<T>
+    {
+        public T data;
+        public int distance;
+        public Vertex<T> cameFrom;
+        public int indegree;
+        public ArrayList<T> neighborEdges;
+
+        public Vertex()
+        {
+
+        }
+
+        public Vertex(T data)
+        {
+            this.data = data;
+            this.distance = -1;
+        }
+
+        public Vertex(T data, int indegree)
+        {
+            this.data = data;
+            this.distance = -1;
+            this.indegree = indegree;
+        }
+
+
+
+    }
+
 }
+
 
 
 
