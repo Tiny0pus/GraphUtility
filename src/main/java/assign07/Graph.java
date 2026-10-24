@@ -6,7 +6,6 @@ public class Graph <Type> {
     private ArrayList<Vertex<Type>> nodes;
     private ArrayList<Edge<Type>> edges;
 
-
     /**
      * Constructor to create a weighted or unweighted graph
      * @param sources - A list of raw data, where each element at a given index corresponds with the same index in 'destinations'
@@ -22,7 +21,22 @@ public class Graph <Type> {
 
         for (int i = 0; i < sources.size(); i++)
         {
-         Vertex<Type> node = new Vertex<>();
+        	boolean exists = false;
+        	
+        	for(int j = 0; j<nodes.size(); j++) {
+        		if(source.get(i).equals(nodes.get(j).data)) {
+        			Edge<T> toExisting = new Edge(weights.get(i),nodes.get(j));
+        			nodes.get(j).addEdge(toExisting);
+        			exists = true;
+        			break;
+        		}
+        		else if(destination.get(i).equals(nodes.get(j).data))
+        	}
+        	
+        	if(!exists) {
+        		
+        	}
+        
         }
     }
 
@@ -63,25 +77,25 @@ public class Graph <Type> {
         public int distance;
         public Vertex<T> cameFrom;
         public int indegree;
-        public ArrayList<T> neighborEdges;
-
-        public Vertex()
-        {
-
-        }
+        public ArrayList<Edge<T>> neighborEdges;
 
         public Vertex(T data)
         {
             this.data = data;
             this.distance = -1;
         }
-
-        public Vertex(T data, int indegree)
-        {
-            this.data = data;
-            this.distance = -1;
-            this.indegree = indegree;
+        
+        public void addEdge(Edge<T>neighbor) {
+        	this.neighborEdges.add(neighbor);
         }
+ 
+//        public Vertex(T data, int indegree)
+//        {
+//            this.data = data;
+//            this.distance = -1;
+//            this.indegree = indegree;
+//        }
+        
 
 
 
