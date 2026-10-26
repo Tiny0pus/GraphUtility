@@ -1,9 +1,9 @@
 package assign07;
 
+import javax.swing.*;
+import java.util.LinkedList;
 import java.util.List;
 
-import assign07.GraphUtility.Edge;
-import assign07.GraphUtility.Vertex;
 
 import java.util.ArrayList;
 public class Graph <Type> {
@@ -24,17 +24,25 @@ public class Graph <Type> {
         }
 
         for(int i = 0; i < sources.size(); i++) {
-			Vertex source = findOrCreateVertex(sources.get(i));
-			Vertex destination = findOrCreateVertex(destinations.get(i));
-			
-			source.edges.add(new Edge(destination, weights.get(i)));
+			Vertex<Type> source = findOrCreateVertex(sources.get(i));
+			Vertex<Type> destination = findOrCreateVertex(destinations.get(i));
+			source.neighborEdges.add(new Edge<>(weights.get(i), destination));
+            destination.indegree++;
       
         }
     }
 
-
     public List<Type> breadthFirstSearch(Type source, Type destination)
     {
+        int costSoFar = 0;
+        LinkedListQueue<Type> queue = new LinkedListQueue<>();
+        Vertex<Type> sourceNode = findVertex(source);
+        Vertex<Type> destNode = findVertex(destination);
+        if (sourceNode == null || destination == null)
+        {
+            throw new IllegalArgumentException("Nodes must exist in graph.");
+        }
+        queue.offer(sourceNode);
         return new ArrayList<Type>();
     }
 
@@ -54,10 +62,10 @@ public class Graph <Type> {
      * @param data
      * @return - found vertex or null if it does not exist
      */
-    private Vertex findVertex(Type data) {
-		for(int i = 0; i < this.verticies.size(); i++) {
-			if(verticies.get(i).data.equals(data))
-				return verticies.get(i);
+    private Vertex<Type> findVertex(Type data) {
+		for(int i = 0; i < this.nodes.size(); i++) {
+			if(nodes.get(i).data.equals(data))
+				return nodes.get(i);
 		}
 		return null;
 	}
@@ -69,12 +77,12 @@ public class Graph <Type> {
      * @param data - Type object
      * @return - created or found vertex
      */
-	private Vertex findOrCreateVertex(Type data) {
-		Vertex vertex = findVertex(data);
+	private Vertex<Type> findOrCreateVertex(Type data) {
+		Vertex<Type> vertex = findVertex(data);
 		
 		if(vertex == null) {
-			vertex = new Vertex(data);
-			verticies.add(vertex);
+			vertex = new Vertex<>(data);
+			nodes.add(vertex);
 		}
 		
 		return vertex;
@@ -94,39 +102,18 @@ public class Graph <Type> {
         }
     }
 
-
-    public static class Vertex<T>
+    @Override
+    public String toString()
     {
-        public T data;
-        public int distance;
-        public Vertex<T> cameFrom;
-        public int indegree;
-        public ArrayList<Edge<T>> neighborEdges;
-
-        public Vertex(T data)
+        for (Vertex<Type> node: nodes)
         {
-            this.data = data;
-            this.distance = -1;
+            for (Edge<Type> edge: node.neighborEdges)
+            {
+                System.out.println(node.data + "(" + Double.toString(edge.weight) + ") ->" + edge.next.data + " (indegree: " + Integer.toString(edge.next.indegree) + ")");
+            }
         }
-        
-        public void addEdge(Edge<T>neighbor) {
-        	this.neighborEdges.add(neighbor);
-        }
-
-
- 
-//        public Vertex(T data, int indegree)
-//        {
-//            this.data = data;
-//            this.distance = -1;
-//            this.indegree = indegree;
-//        }
-        
-
-
-
+        return "Done!";
     }
-
 }
 
 
