@@ -1,6 +1,8 @@
 package assign07;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,6 +26,9 @@ public class GraphTest {
         sources.add("A");
         destinations.add("C");
         weights.add(1.0);
+        sources.add("C");
+        destinations.add("D");
+        weights.add(2.0);
         graph = new Graph<>(sources, destinations, weights);
     }
 
@@ -32,5 +37,15 @@ public class GraphTest {
     void testToString()
     {
         graph.toString();
+    }
+
+    @Test
+    void testBFS()
+    {
+        LinkedList<String> result = new LinkedList<>(graph.breadthFirstSearch("A", "D"));
+        for (String str: result)
+        {
+            System.out.println(str);
+        }
     }
 }
