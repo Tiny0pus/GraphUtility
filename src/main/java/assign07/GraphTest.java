@@ -50,9 +50,24 @@ public class GraphTest {
 
     @Test
     void testRandomGraph() {
-        graphGen.generate(10,11);
+        graphGen.generate(10, 11);
         graph = new Graph<>(graphGen.sources, graphGen.destinations, graphGen.weights);
         graph.toString();
-        System.out.println(graph.breadthFirstSearch(graphGen.sources.getFirst(), graphGen.destinations.getLast()));
+        String source = graphGen.sources.getFirst();
+        String destination =graphGen.destinations.getLast();
+        System.out.println(source + " -> " + destination);
+        System.out.println(graph.breadthFirstSearch(source, destination));
+    }
+
+    @Test
+    void testRandomGraphDij()
+    {
+        graphGen.generate(4, 12);
+        graph = new Graph<>(graphGen.sources, graphGen.destinations, graphGen.weights);
+        graph.toString();
+        String source = graphGen.sources.getLast();
+        String destination = graphGen.destinations.getLast();
+        System.out.println(source + " -> " + destination);
+        System.out.println(graph.dijkstrasAlgorithm(source, destination));
     }
 }

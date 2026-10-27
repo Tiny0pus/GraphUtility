@@ -80,11 +80,16 @@ public class Graph <Type> {
     {
         Vertex srcVertex = findVertex(source);
         Vertex destVertex = findVertex(destination);
+        ArrayList<Type> path = new ArrayList<>();
         if (srcVertex == null || destVertex == null)
         {
             throw new IllegalArgumentException("Source and destination must exist in graph!");
         }
-        ArrayList<Type> path = new ArrayList<>();
+        if (source.equals(destination))
+        {
+            path.add(source);
+            return path;
+        }
         ArrayList<Vertex> unvisitedNodes = new ArrayList<>(nodes);
         srcVertex.bestKnownCost = 0;
         while (!unvisitedNodes.isEmpty())
@@ -94,12 +99,13 @@ public class Graph <Type> {
             for (Edge edge : currentNode.neighborEdges)
             {
                 double newCost = edge.weight;
-                if (edge.next.bestKnownCost + newCost > currentNode.bestKnownCost + newCost || edge.next.bestKnownCost == -1)
+                if (edge.next.bestKnownCost + newCost > currentNode.bestKnownCost + newCost)
                 {
                     edge.next.bestKnownCost = currentNode.bestKnownCost + newCost;
                     edge.next.cameFrom = currentNode;
                 }
             }
+            unvisitedNodes.removeLast();
 
         }
         Vertex pathFinder = destVertex;
@@ -112,6 +118,7 @@ public class Graph <Type> {
         {
             throw new IllegalArgumentException("No path between source and destination exists!");
         }
+        path.addFirst(pathFinder.data);
         return path;
 
 
@@ -181,7 +188,7 @@ public class Graph <Type> {
             neighborEdges = new ArrayList<>();
             this.data = data;
             this.distance = -1;
-            bestKnownCost = -1;
+            bestKnownCost = Double.POSITIVE_INFINITY;
         }
     }
 
