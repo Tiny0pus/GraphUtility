@@ -7,7 +7,7 @@ import java.util.List;
 
 import java.util.ArrayList;
 public class Graph <Type> {
-    private ArrayList<Vertex<Type>> nodes = new ArrayList<>();
+    private ArrayList<Vertex> nodes = new ArrayList<>();
 
     /**
      * Constructor to create a weighted or unweighted graph
@@ -24,9 +24,9 @@ public class Graph <Type> {
         }
 
         for(int i = 0; i < sources.size(); i++) {
-			Vertex<Type> source = findOrCreateVertex(sources.get(i));
-			Vertex<Type> destination = findOrCreateVertex(destinations.get(i));
-			source.neighborEdges.add(new Edge<>(weights.get(i), destination));
+			Vertex source = findOrCreateVertex(sources.get(i));
+			Vertex destination = findOrCreateVertex(destinations.get(i));
+			source.neighborEdges.add(new Edge(weights.get(i), destination));
             destination.indegree++;
       
         }
@@ -34,16 +34,46 @@ public class Graph <Type> {
 
     public List<Type> breadthFirstSearch(Type source, Type destination)
     {
-        int costSoFar = 0;
-        LinkedListQueue<Type> queue = new LinkedListQueue<>();
-        Vertex<Type> sourceNode = findVertex(source);
-        Vertex<Type> destNode = findVertex(destination);
+        LinkedList<Type> path = new LinkedList<>();
+        LinkedList<Vertex> queue = new LinkedList<>();
+        Vertex sourceNode = findVertex(source);
+        Vertex destNode = findVertex(destination);
         if (sourceNode == null || destination == null)
         {
             throw new IllegalArgumentException("Nodes must exist in graph.");
         }
         queue.offer(sourceNode);
-        return new ArrayList<Type>();
+        sourceNode.distance = 0;
+        while (!queue.isEmpty())
+        {
+            Vertex currentVertex = queue.poll();
+            if (currentVertex.data.equals(destination))
+            {
+                currentVertex = destNode;
+                for (int i = 0; i < destNode.distance + 1; i++)
+                {
+                    path.addFirst(currentVertex.data);
+                    currentVertex = currentVertex.cameFrom;
+                }
+                return path;
+            }
+            for (Edge edge : currentVertex.neighborEdges)
+            {
+                if (edge.next.distance > 0)
+                {
+                    continue;
+                }
+                queue.offer(edge.next);
+                edge.next.distance = currentVertex.distance + 1;
+                edge.next.cameFrom = currentVertex;
+            }
+        }
+
+        if (path.isEmpty())
+        {
+            throw new IllegalArgumentException("No path between source and destination exists.");
+        }
+        return path;
     }
 
     public List<Type> dijkstrasAlgorithm(Type source, Type destination)
@@ -62,7 +92,7 @@ public class Graph <Type> {
      * @param data
      * @return - found vertex or null if it does not exist
      */
-    private Vertex<Type> findVertex(Type data) {
+    private Vertex findVertex(Type data) {
 		for(int i = 0; i < this.nodes.size(); i++) {
 			if(nodes.get(i).data.equals(data))
 				return nodes.get(i);
@@ -77,11 +107,11 @@ public class Graph <Type> {
      * @param data - Type object
      * @return - created or found vertex
      */
-	private Vertex<Type> findOrCreateVertex(Type data) {
-		Vertex<Type> vertex = findVertex(data);
+	private Vertex findOrCreateVertex(Type data) {
+		Vertex vertex = findVertex(data);
 		
 		if(vertex == null) {
-			vertex = new Vertex<>(data);
+			vertex = new Vertex(data);
 			nodes.add(vertex);
 		}
 		
@@ -89,25 +119,42 @@ public class Graph <Type> {
 	}
 
 
-
-
-    public static class Edge<T>
+    public class Edge
     {
-        Vertex<T> next;
+        public Vertex owner;
+        Vertex next;
         double weight;
-        public Edge(double weight, Vertex<T> next)
+        public Edge(double weight, Vertex next)
         {
             this.weight = weight;
             this.next = next;
         }
     }
 
+
+    public class Vertex
+    {
+        public Type data;
+        public int distance;
+        public Vertex cameFrom;
+        public int indegree;
+        public ArrayList<Edge> neighborEdges;
+
+        public Vertex(Type data)
+        {
+            neighborEdges = new ArrayList<>();
+            this.data = data;
+            this.distance = -1;
+        }
+    }
+
+
     @Override
     public String toString()
     {
-        for (Vertex<Type> node: nodes)
+        for (Vertex node: nodes)
         {
-            for (Edge<Type> edge: node.neighborEdges)
+            for (Edge edge: node.neighborEdges)
             {
                 System.out.println(node.data + "(" + Double.toString(edge.weight) + ") ->" + edge.next.data + " (indegree: " + Integer.toString(edge.next.indegree) + ")");
             }
