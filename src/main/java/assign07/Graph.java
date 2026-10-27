@@ -78,13 +78,49 @@ public class Graph <Type> {
 
     public List<Type> dijkstrasAlgorithm(Type source, Type destination)
     {
-        return new ArrayList<Type>();
+        Vertex srcVertex = findVertex(source);
+        Vertex destVertex = findVertex(destination);
+        if (srcVertex == null || destVertex == null)
+        {
+            throw new IllegalArgumentException("Source and destination must exist in graph!");
+        }
+        ArrayList<Type> path = new ArrayList<>();
+        ArrayList<Vertex> unvisitedNodes = new ArrayList<>(nodes);
+        srcVertex.bestKnownCost = 0;
+        while (!unvisitedNodes.isEmpty())
+        {
+            unvisitedNodes.sort((node1, node2) -> Double.compare(node2.bestKnownCost, node1.bestKnownCost));
+            Vertex currentNode = unvisitedNodes.getLast();
+            for (Edge edge : currentNode.neighborEdges)
+            {
+                double newCost = edge.weight;
+                if (edge.next.bestKnownCost + newCost > currentNode.bestKnownCost + newCost || edge.next.bestKnownCost == -1)
+                {
+                    edge.next.bestKnownCost = currentNode.bestKnownCost + newCost;
+                    edge.next.cameFrom = currentNode;
+                }
+            }
+
+        }
+        Vertex pathFinder = destVertex;
+        while (pathFinder.cameFrom != null)
+        {
+            path.addFirst(pathFinder.data);
+            pathFinder = pathFinder.cameFrom;
+        }
+        if (path.isEmpty())
+        {
+            throw new IllegalArgumentException("No path between source and destination exists!");
+        }
+        return path;
+
+
     }
     public List<Type> topoSort()
     {
         return new ArrayList<Type>();
     }
-    
+
     /**
      * find vertex that has type data
      * return null if it does not exist in the verticies list
@@ -121,7 +157,6 @@ public class Graph <Type> {
 
     public class Edge
     {
-        public Vertex owner;
         Vertex next;
         double weight;
         public Edge(double weight, Vertex next)
@@ -136,6 +171,7 @@ public class Graph <Type> {
     {
         public Type data;
         public int distance;
+        public double bestKnownCost;
         public Vertex cameFrom;
         public int indegree;
         public ArrayList<Edge> neighborEdges;
@@ -145,6 +181,7 @@ public class Graph <Type> {
             neighborEdges = new ArrayList<>();
             this.data = data;
             this.distance = -1;
+            bestKnownCost = -1;
         }
     }
 
