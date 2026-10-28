@@ -112,6 +112,10 @@ public class Graph <Type> {
         {
             unvisitedNodes.sort((node1, node2) -> Double.compare(node2.bestKnownCost, node1.bestKnownCost));
             Vertex currentNode = unvisitedNodes.getLast();
+            if (currentNode.data.equals(destination))
+            {
+                break;
+            }
             for (Edge edge : currentNode.neighborEdges)
             {
                 double newCost = edge.weight;
@@ -238,7 +242,7 @@ public class Graph <Type> {
         {
             for (Edge edge: node.neighborEdges)
             {
-                System.out.println(node.data + "(" + Double.toString(edge.weight) + ") ->" + edge.next.data + " (indegree: " + Integer.toString(edge.next.indegree) + ")");
+                System.out.println(node.data + " -> " + edge.next.data);
             }
         }
         return "Done!";

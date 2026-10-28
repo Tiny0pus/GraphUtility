@@ -31,9 +31,6 @@ public class GraphTest {
         sources.add("C");
         destinations.add("D");
         weights.add(2.0);
-        sources.add("D");
-        destinations.add("A");
-        weights.add(1.0);
         graph = new Graph<>(sources, destinations, weights);
     }
 
@@ -65,12 +62,12 @@ public class GraphTest {
     @Test
     void testRandomGraphDij()
     {
-        graphGen.generate(4, 9);
+        graphGen.generate(12, 15);
         graph = new Graph<>(graphGen.sources, graphGen.destinations, graphGen.weights);
         graph.toString();
         String source = graphGen.sources.getLast();
-        String destination = graphGen.destinations.getLast();
-        System.out.println(source + " -> " + destination);
+        String destination = graphGen.destinations.getFirst();
+        System.out.println(source + " (Goal) -> (Destination)  " + destination);
         System.out.println(graph.dijkstrasAlgorithm(source, destination));
     }
 
