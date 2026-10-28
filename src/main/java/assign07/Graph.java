@@ -3,11 +3,11 @@ package assign07;
 import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.HashMap;
 
 import java.util.ArrayList;
 public class Graph <Type> {
-    private ArrayList<Vertex> nodes = new ArrayList<>();
+    private HashMap<Type, Vertex> nodes = new HashMap<>();
 
     /**
      * Constructor to create a weighted or unweighted graph
@@ -90,7 +90,7 @@ public class Graph <Type> {
             path.add(source);
             return path;
         }
-        ArrayList<Vertex> unvisitedNodes = new ArrayList<>(nodes);
+        ArrayList<Vertex> unvisitedNodes = new ArrayList<>(nodes.values());
         srcVertex.bestKnownCost = 0;
         while (!unvisitedNodes.isEmpty())
         {
@@ -136,13 +136,9 @@ public class Graph <Type> {
      * @return - found vertex or null if it does not exist
      */
     private Vertex findVertex(Type data) {
-		for(int i = 0; i < this.nodes.size(); i++) {
-			if(nodes.get(i).data.equals(data))
-				return nodes.get(i);
-		}
-		return null;
-	}
-	
+		return nodes.get(data);
+    }
+
     
     /**
      * call findVertex or create a new vertex and add to verticies list if vertex does not exist
@@ -155,9 +151,8 @@ public class Graph <Type> {
 		
 		if(vertex == null) {
 			vertex = new Vertex(data);
-			nodes.add(vertex);
+			nodes.put(data, vertex);
 		}
-		
 		return vertex;
 	}
 
@@ -196,7 +191,7 @@ public class Graph <Type> {
     @Override
     public String toString()
     {
-        for (Vertex node: nodes)
+        for (Vertex node: nodes.values())
         {
             for (Edge edge: node.neighborEdges)
             {

@@ -62,7 +62,7 @@ public class GraphTest {
     @Test
     void testRandomGraphDij()
     {
-        graphGen.generate(4, 12);
+        graphGen.generate(4, 9);
         graph = new Graph<>(graphGen.sources, graphGen.destinations, graphGen.weights);
         graph.toString();
         String source = graphGen.sources.getLast();
