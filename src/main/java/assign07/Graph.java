@@ -80,7 +80,7 @@ public class Graph <Type> {
     {
         Vertex srcVertex = findVertex(source);
         Vertex destVertex = findVertex(destination);
-        ArrayList<Type> path = new ArrayList<>();
+        LinkedList<Type> path = new LinkedList<>();
         if (srcVertex == null || destVertex == null)
         {
             throw new IllegalArgumentException("Source and destination must exist in graph!");
@@ -125,7 +125,34 @@ public class Graph <Type> {
     }
     public List<Type> topoSort()
     {
-        return new ArrayList<Type>();
+        LinkedList<Type> sortedGraph = new LinkedList<>();
+        LinkedList<Vertex> queue = new LinkedList<>();
+        for (Vertex node : nodes.values())
+        {
+            if (node.indegree == 0)
+            {
+                queue.offer(node);
+            }
+        }
+        Vertex currentNode;
+        while (!queue.isEmpty())
+        {
+            currentNode = queue.poll();
+            sortedGraph.offer(currentNode.data);
+            for (Edge edge : currentNode.neighborEdges)
+            {
+
+                edge.next.indegree--;
+                if (edge.next.indegree == 0 && !queue.contains(edge.next))
+                {
+                    queue.offer(edge.next);
+                    edge.next.cameFrom = currentNode;
+                }
+            }
+        }
+        if (!(sortedGraph.size() == nodes.size()))
+            throw new IllegalArgumentException("Can only sort Directed Acyclic Graphs (DAGs)");
+        return sortedGraph;
     }
 
     /**

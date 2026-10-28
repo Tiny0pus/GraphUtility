@@ -31,6 +31,9 @@ public class GraphTest {
         sources.add("C");
         destinations.add("D");
         weights.add(2.0);
+        sources.add("D");
+        destinations.add("A");
+        weights.add(1.0);
         graph = new Graph<>(sources, destinations, weights);
     }
 
@@ -69,5 +72,12 @@ public class GraphTest {
         String destination = graphGen.destinations.getLast();
         System.out.println(source + " -> " + destination);
         System.out.println(graph.dijkstrasAlgorithm(source, destination));
+    }
+
+
+    @Test
+    void testTopo()
+    {
+        System.out.println(graph.topoSort());
     }
 }
