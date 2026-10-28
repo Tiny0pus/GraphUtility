@@ -32,6 +32,22 @@ public class Graph <Type> {
         }
     }
 
+    public Graph(List<Type> sources, List<Type> destinations)
+    {
+        //Ensure there are no edges with incomplete relationships
+        if (sources.size() != destinations.size())
+        {
+            throw new IllegalArgumentException("Sources and Destinations must be equivalent sizes.");
+        }
+
+        for(int i = 0; i < sources.size(); i++) {
+            Vertex source = findOrCreateVertex(sources.get(i));
+            Vertex destination = findOrCreateVertex(destinations.get(i));
+            source.neighborEdges.add(new Edge(0.0, destination));
+            destination.indegree++;
+
+        }
+    }
     public List<Type> breadthFirstSearch(Type source, Type destination)
     {
         LinkedList<Type> path = new LinkedList<>();

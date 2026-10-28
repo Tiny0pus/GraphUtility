@@ -21,13 +21,13 @@ public class GraphTest {
         graphGen = new GraphGenerator();
         sources.add("A");
         destinations.add("B");
-        weights.add(0.0);
+        weights.add(10.0);
         sources.add("B");
         destinations.add("C");
-        weights.add(0.0);
+        weights.add(10.0);
         sources.add("A");
         destinations.add("C");
-        weights.add(1.0);
+        weights.add(5.0);
         sources.add("C");
         destinations.add("D");
         weights.add(2.0);
@@ -79,5 +79,23 @@ public class GraphTest {
     void testTopo()
     {
         System.out.println(graph.topoSort());
+    }
+
+    @Test
+    void graphUtilityBFS()
+    {
+        System.out.println(GraphUtility.shortestPath(sources, destinations, "A", "D"));
+    }
+
+    @Test
+    void graphUtilityDij()
+    {
+        System.out.println(GraphUtility.shortestWeightedPath(sources, destinations, weights, "A", "D"));
+    }
+
+    @Test
+    void graphUtilityTopo()
+    {
+        System.out.println(GraphUtility.sort(sources, destinations));
     }
 }
