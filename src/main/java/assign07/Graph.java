@@ -118,10 +118,14 @@ public class Graph <Type> {
             }
             for (Edge edge : currentNode.neighborEdges)
             {
-                double newCost = edge.weight;
-                if (edge.next.bestKnownCost + newCost > currentNode.bestKnownCost + newCost)
+            	//Maybe here has problem
+            	//Old: double newCost = edge.weigth
+            	double newCost = currentNode.bestKnownCost+edge.weight;
+            	//Old:if (edge.next.bestKnownCost + newCost > currentNode.bestKnownCost + newCost)
+                if (edge.next.bestKnownCost > newCost)
                 {
-                    edge.next.bestKnownCost = currentNode.bestKnownCost + newCost;
+                	//old: edge.next.bestKnownCost = currentNode.bestKnownCost + newCost;
+                    edge.next.bestKnownCost = newCost;
                     edge.next.cameFrom = currentNode;
                 }
             }
