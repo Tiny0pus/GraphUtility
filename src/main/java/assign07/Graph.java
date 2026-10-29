@@ -6,6 +6,14 @@ import java.util.List;
 import java.util.HashMap;
 
 import java.util.ArrayList;
+/**
+ * this class represents a graph object
+ * 
+ * @param <Type> of what elements the graph holds
+ * 
+ * @author - Steven Fletcher and Ducan Mcguire
+ * @version - Oct 28 2026
+ */
 public class Graph <Type> {
     private HashMap<Type, Vertex> nodes = new HashMap<>();
 
@@ -32,6 +40,12 @@ public class Graph <Type> {
         }
     }
 
+    /**
+     * constructor of graph
+     * 
+     * @param sources - from what vertex
+     * @param destination - to what vetex
+     */
     public Graph(List<Type> sources, List<Type> destinations)
     {
         //Ensure there are no edges with incomplete relationships
@@ -48,6 +62,15 @@ public class Graph <Type> {
 
         }
     }
+    
+    /**
+     * performs a breadth frist serach from given source to given destination vetex
+     * return the path if exists, throws IllegalArgument exception if the path does not exist or the given vertex does not exist
+     * 
+     * @param source - starting vertex
+     * @param destination - target vertex
+     * @return the path in a from of a list containing all the vertex it goes through
+     */
     public List<Type> breadthFirstSearch(Type source, Type destination)
     {
         LinkedList<Type> path = new LinkedList<>();
@@ -56,10 +79,13 @@ public class Graph <Type> {
         Vertex destNode = findVertex(destination);
         if (sourceNode == null || destination == null)
         {
-            throw new IllegalArgumentException("Nodes must exist in graph.");
+            throw new IllegalArgumentException("Vertex must exist in graph.");
         }
+        
+        //the start is given a distance of 0
         queue.offer(sourceNode);
         sourceNode.distance = 0;
+        
         while (!queue.isEmpty())
         {
             Vertex currentVertex = queue.poll();
@@ -92,6 +118,14 @@ public class Graph <Type> {
         return path;
     }
 
+    /**
+     * perform dijkstrasAlgorithm(find shortest path by weight)
+     * thorws Illegal arugment excpetion if path does not exist or the given vertex does not exist
+     * 
+     * @param source - starting vertex
+     * @param destination - the target vertex
+     * @return the shortest path by weight in a form of a list containing all the vertex it went through
+     */
     public List<Type> dijkstrasAlgorithm(Type source, Type destination)
     {
         Vertex srcVertex = findVertex(source);
@@ -118,13 +152,10 @@ public class Graph <Type> {
             }
             for (Edge edge : currentNode.neighborEdges)
             {
-            	//Maybe here has problem
-            	//Old: double newCost = edge.weigth
+            	//check if the new path it is going to take is cheaper(shorter) than the cheapest path now
             	double newCost = currentNode.bestKnownCost+edge.weight;
-            	//Old:if (edge.next.bestKnownCost + newCost > currentNode.bestKnownCost + newCost)
                 if (edge.next.bestKnownCost > newCost)
                 {
-                	//old: edge.next.bestKnownCost = currentNode.bestKnownCost + newCost;
                     edge.next.bestKnownCost = newCost;
                     edge.next.cameFrom = currentNode;
                 }
@@ -147,6 +178,11 @@ public class Graph <Type> {
 
 
     }
+    /**
+     * perform a topological sort on the graph
+     * 
+     * @return - topologically sorted graph
+     */
     public List<Type> topoSort()
     {
         LinkedList<Type> sortedGraph = new LinkedList<>();
@@ -208,6 +244,9 @@ public class Graph <Type> {
 	}
 
 
+	/**
+	 * class representing the edge of the graph
+	 */
     public class Edge
     {
         Vertex next;
@@ -220,6 +259,9 @@ public class Graph <Type> {
     }
 
 
+    /**
+     * class representing the vertex of the graph
+     */
     public class Vertex
     {
         public Type data;
@@ -239,6 +281,9 @@ public class Graph <Type> {
     }
 
 
+    /**
+     * class used to represent the graph as a text(use for trouble shooting)
+     */
     @Override
     public String toString()
     {
