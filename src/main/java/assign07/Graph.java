@@ -1,6 +1,10 @@
 package assign07;
 
 import javax.swing.*;
+
+import assign07.Graph.Edge;
+import assign07.Graph.Vertex;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.HashMap;
@@ -17,6 +21,10 @@ import java.util.ArrayList;
 public class Graph <Type> {
     private HashMap<Type, Vertex> nodes = new HashMap<>();
 
+    
+    public Graph() {
+    	this.nodes = new HashMap<>;
+    }
     /**
      * Constructor to create a weighted or unweighted graph
      * @param sources - A list of raw data, where each element at a given index corresponds with the same index in 'destinations'
@@ -279,7 +287,20 @@ public class Graph <Type> {
             bestKnownCost = Double.POSITIVE_INFINITY;
         }
     }
-
+    
+    /**
+     * add a new edge in between two given vertex
+     * 
+     * @param source - from this vertex
+     * @param destination - to this vertex
+     */
+    public void addEdge(Type source, Type destination) {
+  	 Vertex sourceVertex = this.findOrCreateVertex(source);
+  	 Vertex destinationVertex = this.findOrCreateVertex(destination);
+  	 if(sourceVertex != null && destinationVertex != null) {
+  		 Edge addedEdge = new Edge(0.0, destinationVertex);
+  		 sourceVertex.neighborEdges.add(addedEdge);
+  	 }
 
     /**
      * class used to represent the graph as a text(use for trouble shooting)
