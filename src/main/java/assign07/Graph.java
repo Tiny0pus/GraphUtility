@@ -23,8 +23,9 @@ public class Graph <Type> {
 
     
     public Graph() {
-    	this.nodes = new HashMap<>;
+    	this.nodes = new HashMap<>();
     }
+    
     /**
      * Constructor to create a weighted or unweighted graph
      * @param sources - A list of raw data, where each element at a given index corresponds with the same index in 'destinations'
@@ -301,6 +302,7 @@ public class Graph <Type> {
   		 Edge addedEdge = new Edge(0.0, destinationVertex);
   		 sourceVertex.neighborEdges.add(addedEdge);
   	 }
+    }
 
     /**
      * class used to represent the graph as a text(use for trouble shooting)
